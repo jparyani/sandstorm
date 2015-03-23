@@ -60,6 +60,9 @@ Template._loginButtonsLoggedOutSingleLoginButton.helpers({
            Accounts.ui._options.services[this.name];
   },
   capitalizedName: function () {
+    var text = Accounts.ui._options.services[this.name];
+    if (text) return text;
+
     if (this.name === 'github')
       // XXX we should allow service packages to set their capitalized name
       return 'GitHub';
