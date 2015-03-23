@@ -133,7 +133,7 @@ if (Meteor.isClient && allowDemo) {
     Router.go("demo");
     Accounts._loginButtonsSession.closeDropdown();
   }
-  Accounts.oauth.registerService("demo");
+  Accounts.ui.registerService("demo");
   var oldConfiguredHelper = Template._loginButtonsLoggedOutSingleLoginButton.configured;
   Template._loginButtonsLoggedOutSingleLoginButton.configured = function () {
     if (this.name === "demo") {

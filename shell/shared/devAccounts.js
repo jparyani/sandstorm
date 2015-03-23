@@ -48,7 +48,7 @@ if (allowDevAccounts) {
       Router.go("devAccounts");
       Accounts._loginButtonsSession.closeDropdown();
     };
-    Accounts.oauth.registerService("devAccounts");
+    Accounts.ui.registerService("devAccounts");
     var oldConfiguredHelper = Template._loginButtonsLoggedOutSingleLoginButton.configured;
     Template._loginButtonsLoggedOutSingleLoginButton.configured = function () {
       if (this.name === "devAccounts") {

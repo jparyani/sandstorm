@@ -8,7 +8,8 @@ Accounts.ui = {};
 Accounts.ui._options = {
   requestPermissions: {},
   requestOfflineToken: {},
-  forceApprovalPrompt: {}
+  forceApprovalPrompt: {},
+  services: {}
 };
 
 // XXX refactor duplicated code in this function
@@ -87,6 +88,12 @@ Accounts.ui.config = function(options) {
       }
     });
   }
+};
+
+Accounts.ui.registerService = function (serviceName) {
+  // Still register it as an oauth service
+  Accounts.oauth.registerService(serviceName);
+  Accounts.ui._options.services[serviceName] = true;
 };
 
 passwordSignupFields = function () {
