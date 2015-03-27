@@ -20,12 +20,14 @@ var Future = Npm.require("fibers/future");
 var Path = Npm.require("path");
 var Promise = Npm.require("es6-promise").Promise;
 var Capnp = Npm.require("capnp");
+var Url = Npm.require("url");
 
 var GrainInfo = Capnp.importSystem("sandstorm/grain.capnp").GrainInfo;
 
 var TMPDIR = "/tmp";
 var TOKEN_CLEANUP_MINUTES = 15;
 var TOKEN_CLEANUP_TIMER = TOKEN_CLEANUP_MINUTES * 60 * 1000;
+var HOSTNAME = Url.parse(process.env.ROOT_URL).hostname;
 
 var mkdir = Meteor.wrapAsync(Fs.mkdir),
     readFile = Meteor.wrapAsync(Fs.readFile),
@@ -273,14 +275,25 @@ doGrainUpload = function (stream) {
   });
 };
 
-Router.map(function () {
-  this.route("downloadBackup", {
-    where: "server",
-    path: "/downloadBackup/:tokenId",
-    action: function () {
-      var fut = new Future();
-      var response = this.response;
-      var token = FileTokens.findOne(this.params.tokenId);
+Meteor.startup(function () {
+  // Use the rawConnectHandlers instead of iron router so that we don't serve X-Frame-Options
+  // that we added with the BrowserPolicy package. This allows us to do a trick for downloading,
+  // serving the file to be downloaded in an iframe, which gets around popup blockers.
+  WebApp.rawConnectHandlers.use(function (req, response, next) {
+    var hostname = req.headers.host.split(":")[0];
+    if (hostname !== HOSTNAME) {
+      // Move along
+      return next();
+    }
+    var parsedUrl = Url.parse(req.url);
+    var path = parsedUrl.path;
+    if (path.lastIndexOf("/downloadBackup/", 0) !== 0) {
+      return next();
+    }
+
+    inMeteor(function () {
+      var tokenId = parsedUrl.path.slice("/downloadBackup/".length);
+      var token = FileTokens.findOne(tokenId);
       var backupFile = Path.join(token.filePath, "backup.zip");
 
       var fileSize, file;
@@ -296,11 +309,17 @@ Router.map(function () {
         // TODO(someday): this might not work if error occurs after open?
         response.writeHead(404, {"Content-Type": "text/plain"});
         response.write("Failed to archive");
-        fut.return();
+        inMeteor(function() {
+          Meteor.call("cleanupToken", tokenId);
+        });
+        response.end();
       });
 
       file.on("end", function () {
-        fut.return();
+        inMeteor(function() {
+          Meteor.call("cleanupToken", tokenId);
+        });
+        response.end();
       });
 
       file.on("open", function () {
@@ -317,15 +336,12 @@ Router.map(function () {
         });
       });
 
-      file.pipe(this.response);
-
-      fut.wait();
-
-      Meteor.call("cleanupToken", this.params.tokenId);
-      return this.response.end();
-    }
+      file.pipe(response);
+    });
   });
+});
 
+Router.map(function () {
   this.route("uploadBackup", {
     where: "server",
     path: "/uploadBackup",

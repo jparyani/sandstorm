@@ -153,7 +153,9 @@ if (Meteor.isClient) {
         if (err) {
           alert("Backup failed: " + err); // TODO(someday): make this better UI
         } else {
-          window.location = "/downloadBackup/" + id;
+          $("<iframe>").attr("src", "/downloadBackup/" + id).appendTo("body").load(function() {
+             $(this).remove();
+          });
         }
       });
     },
