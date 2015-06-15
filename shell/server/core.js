@@ -149,6 +149,10 @@ restoreInternal = function (sturdyRef, ownerPattern, requiredPermissions) {
     if (token.frontendRef.notificationHandle) {
       var notificationId = token.frontendRef.notificationHandle;
       return {cap: makeNotificationHandle(notificationId, true)};
+    } else if (token.frontendRef.ipNetwork) {
+      return {cap: new IpNetworkImpl()};
+    } else if (token.frontendRef.ipInterface) {
+      return {cap: new IpInterfaceImpl()};
     } else {
       throw new Error("Unknown frontend token type.");
     }
