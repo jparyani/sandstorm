@@ -730,6 +730,9 @@ $KEY</textarea></p>
           <li id="invites-tab" class="{{#if invitesActive}}active{{/if}}">
             {{#linkTo route="adminInvites" data=getToken}}Send Invite{{/linkTo}}
           </li>
+          <li id="caps-tab" class="{{#if capsActive}}active{{/if}}">
+            {{#linkTo route="adminCaps" data=getToken}}Capabilities{{/linkTo}}
+          </li>
         </ul>
         {{> Template.dynamic template=adminTab}}
         {{#if success}}
@@ -796,9 +799,6 @@ $KEY</textarea></p>
         </ul>
       </span>
     </p>
-    <p><button id="offer-ipnetwork">Offer IpNetwork Capability</button>
-       <button id="offer-ipinterface">Offer IpInterface Capability</button><br>
-      <span class="details">These buttons create IpNetwork and IpInterface capabilities respectively, and will return webkeys that you can restore in other apps. Typically these apps will be "drivers" that offer more granular protocols such as IRC or SMTP.</span></p>
     <p><button id="admin-settings-save">Save</button></p>
   </form>
 </template>
@@ -879,6 +879,21 @@ $KEY</textarea></p>
     <button id="regenerateStatsToken">Regenerate Token</button>
     <span><a href="/fetchStats/{{token._id}}">{{token._id}}</a></span>
   </div>
+</template>
+
+<template name="adminCaps">
+  {{#if powerboxOfferUrl}}
+  <div id="powerbox-offer-popup" class="popup">
+    <h3>Powerbox Offer</h3>
+    <div>
+      <input type="text" class="autoSelect" value="{{powerboxOfferUrl}}" readonly>
+    </div>
+  </div>
+  <div id="powerbox-offer-popup-closer" class="popup-closer"></div>
+  {{/if}}
+  <p><button id="offer-ipnetwork">Offer IpNetwork Capability</button>
+     <button id="offer-ipinterface">Offer IpInterface Capability</button><br>
+    <span class="details">These buttons create IpNetwork and IpInterface capabilities respectively, and will return webkeys that you can restore in other apps. Typically these apps will be "drivers" that offer more granular protocols such as IRC or SMTP.</span></p>
 </template>
 
 <template name="appdemo">
