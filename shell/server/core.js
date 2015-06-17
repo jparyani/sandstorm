@@ -76,7 +76,7 @@ function dismissNotification(notificationId, callCancel) {
   }
 }
 
-function hashSturdyRef(sturdyRef) {
+hashSturdyRef = function (sturdyRef) {
   return Crypto.createHash("sha256").update(sturdyRef).digest("base64");
 }
 
@@ -124,6 +124,7 @@ saveFrontendRef = function (frontendRef, owner) {
       _id: hashedSturdyRef,
       frontendRef: frontendRef,
       owner: owner,
+      created: new Date()
     });
     return {sturdyRef: sturdyRef};
   });
@@ -133,7 +134,7 @@ NotificationHandle.prototype.save = function (params) {
   return saveFrontendRef({notificationHandle: this.notificationId}, params.sealFor);
 };
 
-restoreInternal = function (sturdyRef, ownerPattern) {
+restoreInternal = function (sturdyRef, ownerPattern, requiredPermissions) {
   // Restores `sturdyRef`, checking first that its owner matches `ownerPattern`.
   var hashedSturdyRef = hashSturdyRef(sturdyRef);
   var token = ApiTokens.findOne(hashedSturdyRef);
@@ -141,6 +142,9 @@ restoreInternal = function (sturdyRef, ownerPattern) {
     throw new Error("No token found to restore");
   }
   check(token.owner, ownerPattern);
+  if (requiredPermissions && !_.isEqual(token.requiredPermissions, requiredPermissions)) {
+    ApiTokens.update({_id: hashedSturdyRef}, {$set: {requiredPermissions: requiredPermissions}});
+  }
   if (token.frontendRef) {
     if (token.frontendRef.notificationHandle) {
       var notificationId = token.frontendRef.notificationHandle;
@@ -160,10 +164,12 @@ restoreInternal = function (sturdyRef, ownerPattern) {
   }
 };
 
-SandstormCoreImpl.prototype.restore = function (sturdyRef) {
+SandstormCoreImpl.prototype.restore = function (sturdyRef, requiredPermissions) {
   var self = this;
   return inMeteor(function () {
-    return restoreInternal(sturdyRef, {grain: Match.ObjectIncluding({grainId: self.grainId})});
+    return restoreInternal(sturdyRef,
+                           {grain: Match.ObjectIncluding({grainId: self.grainId})},
+                           requiredPermissions);
   });
 };
 
@@ -216,7 +222,8 @@ SandstormCoreImpl.prototype.makeToken = function (ref, owner) {
       _id: hashedSturdyRef,
       grainId: self.grainId,
       objectId: ref,
-      owner: owner
+      owner: owner,
+      created: new Date()
     });
 
     return {

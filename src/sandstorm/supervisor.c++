@@ -1705,6 +1705,7 @@ public:
   kj::Promise<void> restore(RestoreContext context) override {
     auto req = sandstormCore.restoreRequest();
     req.setToken(context.getParams().getToken());
+    req.setRequiredPermissions(context.getParams().getRequiredPermissions());
     return req.send().then([context](auto args) mutable {
       context.getResults().setCap(args.getCap());
     });

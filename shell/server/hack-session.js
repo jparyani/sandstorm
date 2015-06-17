@@ -42,12 +42,15 @@ function SessionContextImpl(grainId, sessionId) {
 }
 
 SessionContextImpl.prototype.offer = function (cap, requiredPermissions) {
-  // TODO(someday): do something with requiredPermissions
   var self = this;
   return inMeteor((function () {
     var castedCap = cap.castAs(SystemPersistent);
     var save = castedCap.save();
     var sturdyRef = waitPromise(save).sturdyRef;
+
+    // TODO(someday): This actually needs to be implemented with the help of the supervisor, and we
+    // should be storing a reference to the parent as well as the requiredPermissions
+    ApiTokens.update({_id: hashSturdyRef(sturdyRef)}, {$set: {requiredPermissions: requiredPermissions}});
     Sessions.update({_id: self.sessionId}, {$set: {
       powerboxView: {
         offer: ROOT_URL.protocol + "//" + makeWildcardHost("api") + "#" + sturdyRef
@@ -90,6 +93,9 @@ Meteor.methods({
       }
     }});
     var sturdyRef = waitPromise(save).sturdyRef;
+    // TODO(someday): Same as with `offer`, this should eventually be part of the supervisor
+    ApiTokens.update({_id: hashSturdyRef(sturdyRef)}, {$set: {parent: hashSturdyRef(token)}});
+
     return sturdyRef.toString();
   },
   finishPowerboxOffer: function (sessionId) {
