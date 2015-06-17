@@ -116,7 +116,7 @@ NotificationHandle.prototype.close = function () {
   });
 };
 
-saveFrontendRef = function (frontendRef, owner) {
+saveFrontendRef = function (frontendRef, owner, userId) {
   return inMeteor(function () {
     var sturdyRef = new Buffer(generateSturdyRef());
     var hashedSturdyRef = hashSturdyRef(sturdyRef);
@@ -124,7 +124,8 @@ saveFrontendRef = function (frontendRef, owner) {
       _id: hashedSturdyRef,
       frontendRef: frontendRef,
       owner: owner,
-      created: new Date()
+      created: new Date(),
+      userId: userId
     });
     return {sturdyRef: sturdyRef};
   });
