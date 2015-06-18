@@ -1175,28 +1175,28 @@ aside #social>p {
   width: 600px;
 }
 
-table#users-table {
+table.admin-table {
   font-size: 14px;
 }
 
-table#users-table {
+table.admin-table {
   border-collapse: collapse;
 }
 
-table#users-table thead td {
+table.admin-table thead td {
   font-weight: 600;
   border-bottom: 1px solid #aaa;
 }
 
-table#users-table td {
+table.admin-table td {
   padding: 0px 5px 5px;
 }
 
-table#users-table td:first-child {
+table.admin-table td:first-child {
   padding-left: 16px;
 }
 
-table#users-table tr {
+table.admin-table tr {
   height: 32px;
   border-bottom: 1px solid #ddd;
 }

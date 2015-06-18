@@ -601,10 +601,41 @@ if (Meteor.isClient) {
     }
   });
 
+  Template.adminCaps.onCreated(function () {
+    var state = Iron.controller().state;
+    var token = state.get("token");
+    this.subscribe("adminApiTokens", token);
+  });
+
   Template.adminCaps.helpers({
     powerboxOfferUrl: function () {
       var state = Iron.controller().state;
       return state.get("powerboxOfferUrl");
+    },
+    caps: function () {
+      return ApiTokens.find({"frontendRef": {$in: [{ipNetwork: true}, {ipInterface: true}]}});
+    },
+    userName: function () {
+      var user = Meteor.users.findOne({_id: this.userId});
+      var services = user.services;
+      if (services.github) {
+        return services.github.username;
+      } else if (services.google) {
+        return services.google.email;
+      } else if (services.emailToken) {
+        return services.emailToken.email;
+      } else {
+        return user.profile.name;
+      }
+    },
+    isCurrentUser: function () {
+      return Meteor.userId() === this.userId;
+    },
+    isOtherUser: function () {
+      return this.userId && Meteor.userId() !== this.userId;
+    },
+    isDisabled: function () {
+      return !this.userId;
     }
   })
 
@@ -947,5 +978,12 @@ if (Meteor.isServer) {
 
     // Notify ready.
     this.ready();
+  });
+  Meteor.publish("adminApiTokens", function (token) {
+    if (!(this.userId && isAdminById(this.userId)) && !tokenIsValid(token)) {
+      return [];
+    }
+    return ApiTokens.find({"frontendRef": {$in: [{ipNetwork: true}, {ipInterface: true}]}},
+                          {fields: {frontendRef: 1, created: 1, userId: 1}});
   });
 }
