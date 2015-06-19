@@ -908,10 +908,9 @@ $KEY</textarea></p>
         <tr>
           <td>{{#if frontendRef.ipNetwork}}IpNetwork{{/if}}{{#if frontendRef.ipInterface}}IpInterface{{/if}}</td>
           <td>
-            <select class="user-class" name="select">
-              <option value="disabled" selected={{#if isDiabled}}selected{{/if}}>disabled</option>
-              {{#if isOtherUser}}<option value="{{userId}}" selected=selected>{{userName}}</option>{{/if}}
-              {{#if isCurrentUser}}<option value="_me" selected=selected>Me</option>{{/if}}
+            <select class="cap-user" name="select" data-id="{{_id}}">
+              <option value="disabled" selected={{#if isDisabled}}selected{{/if}}>disabled</option>
+              <option value="{{userId}}" selected={{#if userId}}selected{{/if}}>{{userName}}</option>
             </select>
           </td>
           <td title="{{created}}">{{dateString created}}</td>

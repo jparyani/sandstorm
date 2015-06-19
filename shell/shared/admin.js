@@ -617,6 +617,7 @@ if (Meteor.isClient) {
     },
     userName: function () {
       var user = Meteor.users.findOne({_id: this.userId});
+      user = user || Meteor.user();
       var services = user.services;
       if (services.github) {
         return services.github.username;
@@ -628,16 +629,21 @@ if (Meteor.isClient) {
         return user.profile.name;
       }
     },
-    isCurrentUser: function () {
-      return Meteor.userId() === this.userId;
-    },
-    isOtherUser: function () {
-      return this.userId && Meteor.userId() !== this.userId;
-    },
     isDisabled: function () {
       return !this.userId;
+    },
+    userIdOrCurrent: function () {
+      return this.userId || Meteor.userId();
     }
   })
+
+  var updateCap = function (capId, userId) {
+    var state = Iron.controller().state;
+    resetResult(state);
+    state.set("successMessage", "Cap's user has been updated.");
+    var handleErrorBound = handleError.bind(state);
+    Meteor.call("adminUpdateCap", state.get("token"), capId, userId, handleErrorBound)
+  }
 
   Template.adminCaps.events({
     "click #offer-ipnetwork": function (event) {
@@ -663,7 +669,17 @@ if (Meteor.isClient) {
     "click #powerbox-offer-popup-closer": function (event) {
       var state = Iron.controller().state;
       return state.set("powerboxOfferUrl", null);
-    }
+    },
+    "change select.cap-user": function (event) {
+      var value = event.target.selectedOptions[0].value;
+      var capId = event.target.getAttribute("data-id");
+
+      if (value == "disabled") {
+        updateCap(capId, null);
+      } else {
+        updateCap(capId, value);
+      }
+    },
   });
 }
 
@@ -872,6 +888,11 @@ if (Meteor.isServer) {
         }
       })).sturdyRef;
       return ROOT_URL.protocol + "//" + makeWildcardHost("api") + "#" + sturdyRef;
+    },
+    adminUpdateCap: function (token, capId, userId) {
+      checkAuth(token);
+
+      ApiTokens.update({_id: capId}, {$set: {userId: userId}});
     }
   });
 
