@@ -398,8 +398,12 @@ if (Meteor.isClient) {
       powerboxRequestInfo = null;
     },
     "click #powerbox-offer-popup-closer": function (event) {
-      // TODO(soon): handle errors and what not
-      Meteor.call("finishPowerboxOffer", currentSessionId);
+      Meteor.call("finishPowerboxOffer", currentSessionId, function (err) {
+        // TODO(someday): display the error nicely to the user
+        if (err) {
+          console.error(err);
+        }
+      });
     },
     "submit #powerbox-request-form": function (event) {
       event.preventDefault();
