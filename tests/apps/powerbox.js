@@ -31,7 +31,7 @@ module.exports = {};
 module.exports["Install Powerbox"] = function (browser) {
   browser
     .init()
-    .installApp("http://sandstorm.io/apps/jparyani/powerbox-1.spk", "b0704d58e11f67494b6b203dff5cc8b6")
+    .installApp("http://sandstorm.io/apps/jparyani/powerbox-2.spk", "9d6493e63bc9919de3959fe0c5a131ad")
     .assert.containsText("#grainTitle", "Untitled SandstormTest");
 };
 
