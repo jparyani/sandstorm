@@ -541,8 +541,7 @@ if (Meteor.isClient) {
 
     hash: function () {
       return Template.instance().originalHash;
-    }
-  });
+    },
 
     showPowerboxOffer: function () {
       var session = Sessions.findOne({_id: this.sessionId}, {fields: {powerboxView: 1}});
