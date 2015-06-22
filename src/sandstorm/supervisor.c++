@@ -1566,7 +1566,8 @@ public:
   }
 
   kj::Promise<void> export_(ExportContext context) override {
-    KJ_FAIL_REQUIRE("Cannot call save() on capabilities across realms. Use SandstormApi.save().");
+    KJ_FAIL_REQUIRE("Cannot directly call save() on capabilities outside the grain. "
+      "Use SandstormApi.save() instead.");
   }
 private:
   SandstormCore::Client sandstormCore;
