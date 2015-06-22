@@ -94,7 +94,7 @@ Meteor.methods({
     }});
     var sturdyRef = waitPromise(save).sturdyRef;
     // TODO(someday): Same as with `offer`, this should eventually be part of the supervisor
-    ApiTokens.update({_id: hashSturdyRef(sturdyRef)}, {$set: {parent: hashSturdyRef(token)}});
+    ApiTokens.update({_id: hashSturdyRef(sturdyRef)}, {$set: {parentToken: hashSturdyRef(token)}});
 
     return sturdyRef.toString();
   },
