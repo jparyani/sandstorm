@@ -1554,8 +1554,7 @@ public:
   kj::Promise<void> import(ImportContext context) override {
     auto cap = context.getParams().getCap().castAs<AppPersistent<> >();
     auto owner = context.getParams().getParams().getSealFor();
-    return cap.saveRequest().send()
-        .then([this, owner, context](auto response) mutable {
+    return cap.saveRequest().send().then([this, owner, context](auto response) mutable {
       auto req = sandstormCore.makeTokenRequest();
       req.getRef().setAppRef(response.getObjectId());
       req.setOwner(owner);
