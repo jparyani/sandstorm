@@ -60,7 +60,7 @@ SessionContextImpl.prototype.offer = function (cap, requiredPermissions) {
 };
 
 Meteor.methods({
-  finishPowerboxRequest: function (webkeyUrl, grainId) {
+  finishPowerboxRequest: function (webkeyUrl, saveLabel, grainId) {
     check(webkeyUrl, String);
     check(grainId, String);
 
@@ -89,7 +89,7 @@ Meteor.methods({
     var save = castedCap.save({grain: {
       grainId: grainId,
       saveLabel: {
-        defaultText: "Requested Powerbox Capability"
+        defaultText: saveLabel
       }
     }});
     var sturdyRef = waitPromise(save).sturdyRef;

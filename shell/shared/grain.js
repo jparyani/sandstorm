@@ -403,8 +403,8 @@ if (Meteor.isClient) {
     },
     "submit #powerbox-request-form": function (event) {
       event.preventDefault();
-      Meteor.call("finishPowerboxRequest", event.target.token.value, this.grainId,
-        function (err, token) {
+      Meteor.call("finishPowerboxRequest", event.target.token.value, event.target.petname.value,
+        this.grainId,function (err, token) {
           if (err) {
             Session.set("powerbox-request-error", err.toString());
           } else {
