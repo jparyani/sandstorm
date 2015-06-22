@@ -57,7 +57,7 @@ function dismissNotification(notificationId, callCancel) {
       if (!callCancel) {
         dropInternal(id, {frontend: null});
       } else {
-        var notificationCap = waitPromise(restoreInternal(id, {frontend: null})).cap;
+        var notificationCap = restoreInternal(id, {frontend: null}).cap;
         var castedNotification = notificationCap.castAs(PersistentOngoingNotification);
         dropInternal(id, {frontend: null});
         try {
@@ -140,32 +140,46 @@ restoreInternal = function (sturdyRef, ownerPattern, requiredPermissions) {
   var hashedSturdyRef = hashSturdyRef(sturdyRef);
   var token = ApiTokens.findOne(hashedSturdyRef);
   if (!token) {
-    throw new Error("No token found to restore");
+    throw new Meteor.Error(403, "No token found to restore");
   }
   check(token.owner, ownerPattern);
   if (requiredPermissions && !_.isEqual(token.requiredPermissions, requiredPermissions)) {
     ApiTokens.update({_id: hashedSturdyRef}, {$set: {requiredPermissions: requiredPermissions}});
   }
+
+  if (token.expires && token.expires.getTime() <= Date.now()) {
+    throw new Meteor.Error(403, "Authorization token expired");
+  }
+
+  if (token.expiresIfUnused) {
+    if (token.expiresIfUnused.getTime() <= Date.now()) {
+      throw new Meteor.Error(403, "Authorization token expired");
+    } else {
+      // It's getting used now, so clear the expiresIfUnused field.
+      ApiTokens.update(token._id, {$set: {expiresIfUnused: null}});
+    }
+  }
+
   if (token.frontendRef) {
     if (token.frontendRef.notificationHandle) {
       var notificationId = token.frontendRef.notificationHandle;
       return {cap: makeNotificationHandle(notificationId, true)};
     } else if (token.frontendRef.ipNetwork) {
-      return {cap: new IpNetworkImpl()};
+      return {cap: makeIpNetwork()};
     } else if (token.frontendRef.ipInterface) {
-      return {cap: new IpInterfaceImpl()};
+      return {cap: makeIpInterface()};
     } else {
-      throw new Error("Unknown frontend token type.");
+      throw new Meteor.Error(400, "Unknown frontend token type.");
     }
   } else if (token.objectId) {
     if (token.objectId.appRef) {
       token.objectId.appRef = new Buffer(token.objectId.appRef);
     }
-    return useGrain(token.grainId, function (supervisor) {
+    return waitPromise(useGrain(token.grainId, function (supervisor) {
       return supervisor.restore(token.objectId);
-    });
+    }));
   } else {
-    throw new Error("Unknown token type.");
+    throw new Meteor.Error(400, "Unknown token type.");
   }
 };
 

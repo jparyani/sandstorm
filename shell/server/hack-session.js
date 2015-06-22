@@ -80,8 +80,7 @@ Meteor.methods({
 
     var cap;
     try {
-      cap = waitPromise(restoreInternal(token,
-                                        Match.Optional({webkey: Match.Optional(Match.Any)}))).cap;
+      cap = restoreInternal(token, Match.Optional({webkey: Match.Optional(Match.Any)})).cap;
     } catch (err) {
       throw new Meteor.Error(500, err.toString());
     }
