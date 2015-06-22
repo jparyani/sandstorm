@@ -1808,7 +1808,7 @@ private:
 
 class SupervisorMain::SupervisorImpl final: public Supervisor::Server {
 public:
-  inline SupervisorImpl(kj::UnixEventPort& eventPort, UiView::Client&& mainView,
+  inline SupervisorImpl(kj::UnixEventPort& eventPort, MainView<>::Client&& mainView,
                         DiskUsageWatcher& diskWatcher, WakelockSet& wakelockSet)
       : eventPort(eventPort), mainView(kj::mv(mainView)), diskWatcher(diskWatcher),
         wakelockSet(wakelockSet) {}
@@ -1874,7 +1874,7 @@ public:
         return kj::READY_NOW;
       }
       case SupervisorObjectId<>::APP_REF: {
-        auto req = mainView.castAs<MainView<>>().restoreRequest();
+        auto req = mainView.restoreRequest();
         req.setObjectId(objectId.getAppRef());
         return req.send().then([context](auto args) mutable {
           context.getResults().setCap(args.getCap());
@@ -1898,7 +1898,7 @@ public:
 
 private:
   kj::UnixEventPort& eventPort;
-  UiView::Client mainView;
+  MainView<>::Client mainView;
   DiskUsageWatcher& diskWatcher;
   WakelockSet& wakelockSet;
 
@@ -2089,7 +2089,7 @@ auto SupervisorMain::DefaultSystemConnector::run(
   capnp::MallocMessageBuilder message;
   auto hostId = message.initRoot<capnp::rpc::twoparty::VatId>();
   hostId.setSide(capnp::rpc::twoparty::Side::CLIENT);
-  UiView::Client app = server.bootstrap(hostId).castAs<UiView>();
+  MainView<>::Client app = server.bootstrap(hostId).castAs<MainView<>>();
 
   // Set up the external RPC interface, re-exporting the UiView.
   // TODO(someday):  If there are multiple front-ends, or the front-ends restart a lot, we'll
