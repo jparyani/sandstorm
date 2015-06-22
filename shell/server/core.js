@@ -81,7 +81,7 @@ hashSturdyRef = function (sturdyRef) {
 }
 
 function generateSturdyRef() {
-  return Random.secret();
+  return Random.id(22);
 }
 
 Meteor.methods({
