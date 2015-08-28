@@ -22,5 +22,5 @@ THIS_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 cd $THIS_DIR
 
 xvfb-run ./node_modules/selenium-standalone/bin/selenium-standalone start &
-sleep 30
+sleep 10
 ./node_modules/.bin/nightwatch >> /var/log/sandstorm-test.log
