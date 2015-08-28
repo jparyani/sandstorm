@@ -10,7 +10,7 @@ N INIT INFO
 
 dir="/tmp"
 user="root"
-cmd="DISPLAY=:10 /var/lib/jenkins/workspace/sandstorm-tmp/tests/node_modules/.bin/selenium-standalone start"
+cmd="DISPLAY=:10 /root/sandstorm/tests/node_modules/.bin/selenium-standalone start"
 
 name=`basename $0`
 pid_file="/var/run/$name.pid"
