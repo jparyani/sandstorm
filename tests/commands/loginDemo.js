@@ -25,8 +25,7 @@ exports.command = function(callback) {
     .url(this.launchUrl + "/demo")
     .execute('window.Meteor.logout()')
     .pause(short_wait)
-    .click("#createDemoUser")
-    .url(this.launch_url + "/grain/new")
+    .click(".start")
     .waitForElementVisible('.app-list', medium_wait)
     .resizeWindow(utils.default_width, utils.default_height);
 
