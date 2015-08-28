@@ -1,5 +1,5 @@
 {
-  "src_folders" : ["tests", "apps", "unittests"],
+  "src_folders" : ["load_test"],
   "output_folder" : "reports",
   "custom_commands_path" : "commands",
 
@@ -14,7 +14,7 @@
 
   "test_settings" : {
     "default" : {
-      "launch_url" : "http://local.sandstorm.io:6080",
+      "launch_url" : "https://testrock.sandstorm.io",
       "selenium_port"  : 4444,
       "selenium_host"  : "localhost",
       "silent": true,
