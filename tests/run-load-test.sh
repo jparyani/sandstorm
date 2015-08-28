@@ -17,6 +17,10 @@
 # limitations under the License.
 
 export PATH=/bin:/usr/bin:$PATH
+
+THIS_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+cd $THIS_DIR
+
 xvfb-run ./node_modules/selenium-standalone/bin/selenium-standalone start &
 sleep 30
 ./node_modules/.bin/nightwatch >> /var/log/sandstorm-test.log
