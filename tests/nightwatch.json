@@ -1,5 +1,5 @@
 {
-  "src_folders" : ["load_test"],
+  "src_folders" : ["oasis_test"],
   "output_folder" : "reports",
   "custom_commands_path" : "commands",
 
@@ -14,7 +14,7 @@
 
   "test_settings" : {
     "default" : {
-      "launch_url" : "https://testrock.sandstorm.io",
+      "launch_url" : "https://oasis.sandstorm.io",
       "selenium_port"  : 4444,
       "selenium_host"  : "localhost",
       "silent": true,

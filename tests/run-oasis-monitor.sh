@@ -21,5 +21,4 @@ export PATH=/bin:/usr/bin:$PATH
 THIS_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 cd $THIS_DIR
 
-sleep 30
-./node_modules/.bin/nightwatch >> /var/log/sandstorm-test.log
+./node_modules/.bin/nightwatch

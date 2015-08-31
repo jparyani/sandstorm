@@ -27,7 +27,7 @@ var assetsPath = path.resolve(__dirname, '../assets');
 module.exports = {};
 
 
-function install (browser) {
+module.exports["Test install" ] = function (browser) {
   browser
     .loginDemo()
     .url(browser.launch_url + "/install/ca690ad886bf920026f8b876c19539c1?url=http://sandstorm.io/apps/ssjekyll8.spk")
@@ -35,9 +35,9 @@ function install (browser) {
     .click('#confirmInstall')
     .waitForElementVisible('.app-action[data-app-id="nqmcqs9spcdpmqyuxemf0tsgwn8awfvswc58wgk375g4u25xv6yh"]', short_wait)
     .assert.containsText('.app-action[data-app-id="nqmcqs9spcdpmqyuxemf0tsgwn8awfvswc58wgk375g4u25xv6yh"]>.app-title', 'Hacker CMS');
-}
+};
 
-function testNew (browser) {
+module.exports["Test new grain" ] = function (browser) {
   browser
     .url(browser.launch_url + "/grain/new")
     .waitForElementVisible('.app-list', medium_wait)
@@ -45,9 +45,9 @@ function testNew (browser) {
     .click('.app-action[data-app-id="nqmcqs9spcdpmqyuxemf0tsgwn8awfvswc58wgk375g4u25xv6yh"]')
     .waitForElementVisible('#grainTitle', medium_wait)
     .assert.containsText('#grainTitle', 'Untitled Hacker CMS Site');
-}
+};
 
-function testGrain (browser) {
+module.exports["Test grain frame" ] = function (browser) {
   browser
     .pause(short_wait)
     .frame('grain-frame')
@@ -57,12 +57,3 @@ function testGrain (browser) {
     .waitForElementVisible(".delete", short_wait)
     .click(".delete");
 };
-// https://testrock.sandstorm.io/install/f0c18bb97e5f0aa76dc2e709a3b0b449?url=http://ethercalc.net/ethercalc-201505183.spk
-for (var i = 0; i < 20000; i++) {
-  module.exports["Test install " + i] = install;
-
-  for (var j = 0; j < 5; j++) {
-    module.exports["Test new grain " + i + " " + j] = testNew;
-    module.exports["Test grain frame " + i + " " + j] = testGrain;
-  }
-}
