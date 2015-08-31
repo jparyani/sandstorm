@@ -55,5 +55,6 @@ module.exports["Test grain frame" ] = function (browser) {
     .assert.containsText('#publish', 'Publish')
     .frame(null)
     .waitForElementVisible(".delete", short_wait)
-    .click(".delete");
+    .click(".delete")
+    .pause(1000);
 };
