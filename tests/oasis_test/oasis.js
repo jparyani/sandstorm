@@ -33,7 +33,7 @@ module.exports["Test install" ] = function (browser) {
     .url(browser.launch_url + "/install/ca690ad886bf920026f8b876c19539c1?url=http://sandstorm.io/apps/ssjekyll8.spk")
     .waitForElementVisible('#step-confirm', very_long_wait)
     .click('#confirmInstall')
-    .waitForElementVisible('.app-action[data-app-id="nqmcqs9spcdpmqyuxemf0tsgwn8awfvswc58wgk375g4u25xv6yh"]', short_wait)
+    .waitForElementVisible('.app-action[data-app-id="nqmcqs9spcdpmqyuxemf0tsgwn8awfvswc58wgk375g4u25xv6yh"]', medium_wait)
     .assert.containsText('.app-action[data-app-id="nqmcqs9spcdpmqyuxemf0tsgwn8awfvswc58wgk375g4u25xv6yh"]>.app-title', 'Hacker CMS');
 };
 
@@ -41,7 +41,7 @@ module.exports["Test new grain" ] = function (browser) {
   browser
     .url(browser.launch_url + "/grain/new")
     .waitForElementVisible('.app-list', medium_wait)
-    .waitForElementVisible('.app-action[data-app-id="nqmcqs9spcdpmqyuxemf0tsgwn8awfvswc58wgk375g4u25xv6yh"]', short_wait)
+    .waitForElementVisible('.app-action[data-app-id="nqmcqs9spcdpmqyuxemf0tsgwn8awfvswc58wgk375g4u25xv6yh"]', medium_wait)
     .click('.app-action[data-app-id="nqmcqs9spcdpmqyuxemf0tsgwn8awfvswc58wgk375g4u25xv6yh"]')
     .waitForElementVisible('#grainTitle', medium_wait)
     .assert.containsText('#grainTitle', 'Untitled Hacker CMS Site');
