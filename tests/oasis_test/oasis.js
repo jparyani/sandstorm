@@ -29,7 +29,7 @@ module.exports = {};
 
 module.exports["Test install" ] = function (browser) {
   browser
-    .url(this.launchUrl + "/demo")
+    .url(browser.launchUrl + "/demo")
     .execute('window.Meteor.logout()')
     .pause(short_wait)
     .waitForElementVisible('.start', medium_wait)
