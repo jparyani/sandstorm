@@ -53,7 +53,7 @@ module.exports["Test new grain" ] = function (browser) {
 
 module.exports["Test grain frame" ] = function (browser) {
   browser
-    .pause(short_wait)
+    .waitForElementVisible('#grain-frame', medium_wait)
     .frame('grain-frame')
     .waitForElementPresent('#publish', medium_wait)
     .assert.containsText('#publish', 'Publish')
