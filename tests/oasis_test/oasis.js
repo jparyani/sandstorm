@@ -24,9 +24,23 @@ var utils = require('../utils'),
 var path = require('path');
 var assetsPath = path.resolve(__dirname, '../assets');
 
+var replica_id = process.env.OASIS_REPLICA_ID || 0;
+
 module.exports = {};
 
-module.exports["Test shared grain" ] = function (browser) {
+module.exports["Init cookie " + replica_id] = function (browser) {
+  browser
+    .url("https://sandstorm.io")
+    .pause(1000)
+    .deleteCookie("__cfduid", function () {
+      this
+        .pause(1000)
+        .execute("document.cookie = '__cfduid=d466c041ac59badb69d05556aac295de4144174924" + replica_id + ";domain=.sandstorm.io;expires=Sat, 01-Jan-2030 00:00:00 GMT';")
+        .pause(1000);
+    });
+};
+
+module.exports["Test shared grain " + replica_id] = function (browser) {
   browser
     .url(browser.launch_url + "/shared/1ilQmtlp4cUM4rwuHKAFTwC_3k9SiwGAtJRxXXSHPVx")
     .resizeWindow(utils.default_width, utils.default_height)
@@ -34,7 +48,7 @@ module.exports["Test shared grain" ] = function (browser) {
     .assert.containsText('#grainTitle', 'Monitoring Test Grain');
 };
 
-module.exports["Test grain frame" ] = function (browser) {
+module.exports["Test grain frame " + replica_id] = function (browser) {
   browser
     .waitForElementVisible('#grain-frame', medium_wait)
     .frame('grain-frame')

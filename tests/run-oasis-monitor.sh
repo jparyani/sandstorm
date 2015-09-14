@@ -16,9 +16,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -euo pipefail
+
 export PATH=/bin:/usr/bin:$PATH
 
 THIS_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
 cd $THIS_DIR
 
+export OASIS_REPLICA_ID=0
+./node_modules/.bin/nightwatch
+
+export OASIS_REPLICA_ID=1
+./node_modules/.bin/nightwatch
+
+export OASIS_REPLICA_ID=2
+./node_modules/.bin/nightwatch
+
+export OASIS_REPLICA_ID=3
 ./node_modules/.bin/nightwatch
