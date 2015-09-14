@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+killall iceweasel
 set -euo pipefail
 
 export PATH=/bin:/usr/bin:$PATH
