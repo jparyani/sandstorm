@@ -26,29 +26,12 @@ var assetsPath = path.resolve(__dirname, '../assets');
 
 module.exports = {};
 
-
-module.exports["Test install" ] = function (browser) {
+module.exports["Test shared grain" ] = function (browser) {
   browser
-    .url(browser.launchUrl + "/demo")
-    .execute('window.Meteor.logout()')
-    .pause(short_wait)
-    .waitForElementVisible('.start', medium_wait)
-    .click(".start")
-    .waitForElementVisible('.app-list', medium_wait)
+    .url(browser.launch_url + "/shared/1ilQmtlp4cUM4rwuHKAFTwC_3k9SiwGAtJRxXXSHPVx")
     .resizeWindow(utils.default_width, utils.default_height)
-    .url(browser.launch_url + "/install/ca690ad886bf920026f8b876c19539c1?url=http://sandstorm.io/apps/ssjekyll8.spk")
-    .waitForElementVisible('#step-confirm', very_long_wait)
-    .click('#confirmInstall')
-    .waitForElementVisible('.app-action[data-app-id="nqmcqs9spcdpmqyuxemf0tsgwn8awfvswc58wgk375g4u25xv6yh"]', medium_wait)
-    .assert.containsText('.app-action[data-app-id="nqmcqs9spcdpmqyuxemf0tsgwn8awfvswc58wgk375g4u25xv6yh"]>.app-title', 'Hacker CMS')
-    .pause(short_wait);
-};
-
-module.exports["Test new grain" ] = function (browser) {
-  browser
-    .click('.app-action[data-app-id="nqmcqs9spcdpmqyuxemf0tsgwn8awfvswc58wgk375g4u25xv6yh"]')
     .waitForElementVisible('#grainTitle', medium_wait)
-    .assert.containsText('#grainTitle', 'Untitled Hacker CMS Site');
+    .assert.containsText('#grainTitle', 'Monitoring Test Grain');
 };
 
 module.exports["Test grain frame" ] = function (browser) {
@@ -56,9 +39,5 @@ module.exports["Test grain frame" ] = function (browser) {
     .waitForElementVisible('#grain-frame', medium_wait)
     .frame('grain-frame')
     .waitForElementPresent('#publish', medium_wait)
-    .assert.containsText('#publish', 'Publish')
-    .frame(null)
-    .waitForElementVisible(".delete", short_wait)
-    .click(".delete")
-    .pause(1000);
+    .assert.containsText('#publish', 'Publish');
 };
