@@ -28,3 +28,9 @@ export OASIS_REPLICA_ID=0
 
 export OASIS_REPLICA_ID=1
 ./node_modules/.bin/nightwatch
+
+export OASIS_REPLICA_ID=2
+./node_modules/.bin/nightwatch
+
+export OASIS_REPLICA_ID=3
+./node_modules/.bin/nightwatch

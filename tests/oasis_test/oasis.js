@@ -31,13 +31,8 @@ module.exports = {};
 module.exports["Init cookie " + replica_id] = function (browser) {
   browser
     .url("https://sandstorm.io")
-    .pause(1000)
-    .deleteCookie("__cfduid", function () {
-      this
-        .pause(1000)
-        .execute("document.cookie = '__cfduid=d466c041ac59badb69d05556aac295de4144174924" + replica_id + ";domain=.sandstorm.io;expires=Sat, 01-Jan-2030 00:00:00 GMT';")
-        .pause(1000);
-    });
+    .execute("document.cookie = 'force_replica=" + replica_id + ";domain=.sandstorm.io;expires=Sat, 01-Jan-2030 00:00:00 GMT';")
+    .pause(1000);
 };
 
 module.exports["Test shared grain " + replica_id] = function (browser) {
