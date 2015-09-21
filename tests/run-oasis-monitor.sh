@@ -17,6 +17,7 @@
 # limitations under the License.
 
 killall iceweasel
+rm -rf /tmp/anonymous*
 set -euo pipefail
 
 export PATH=/bin:/usr/bin:$PATH
