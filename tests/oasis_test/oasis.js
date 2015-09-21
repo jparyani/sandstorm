@@ -39,8 +39,7 @@ module.exports["Test shared grain " + replica_id] = function (browser) {
   browser
     .url(browser.launch_url + "/shared/1ilQmtlp4cUM4rwuHKAFTwC_3k9SiwGAtJRxXXSHPVx")
     .resizeWindow(utils.default_width, utils.default_height)
-    .waitForElementVisible('#grainTitle', medium_wait)
-    .assert.containsText('#grainTitle', 'Monitoring Test Grain');
+    .waitForElementVisible('#grainTitle', medium_wait);
 };
 
 module.exports["Test grain frame " + replica_id] = function (browser) {
