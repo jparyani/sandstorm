@@ -31,7 +31,7 @@ module.exports = {};
 module.exports["Init cookie " + replica_id] = function (browser) {
   browser
     .url("https://sandstorm.io")
-    .execute('document.cookie = "force_replica=' + replica_id + ';domain=.oasis.sandstorm.io;path=/"')
+    .execute('document.cookie = "force_replica=' + replica_id + ';domain=.sandstorm.io;path=/"')
     .pause(1000);
 };
 
