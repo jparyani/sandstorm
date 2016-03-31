@@ -358,7 +358,7 @@ Template.adminSettings.helpers({
   },
 
   isOrganizationSaml: function () {
-    return globalDb.getOrganizationSam();
+    return globalDb.getOrganizationSaml();
   },
 
   ldapEnabled: function () {
