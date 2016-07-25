@@ -44,8 +44,8 @@ module.exports["Test shared grain " + replica_id] = function (browser) {
 
 module.exports["Test grain frame " + replica_id] = function (browser) {
   browser
-    .waitForElementVisible('#grain-frame', medium_wait)
-    .frame('grain-frame')
+    .waitForElementVisible('.grain-frame', medium_wait)
+    .frame('grain-frame-EYEpa6nL2qZvAZgCwRsAcw')
     .waitForElementPresent('#publish', medium_wait)
     .assert.containsText('#publish', 'Publish');
 };
